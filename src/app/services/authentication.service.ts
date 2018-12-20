@@ -37,7 +37,7 @@ export class AuthenticationService {
     const refreshToken: string = localStorage.getItem('refreshToken');
 
     return this.http
-      .post(`${environment.apiUrl}/refresh-token`, { refreshToken });
+      .post(`${environment.apiUrl}/api/refresh-token`, { refreshToken });
     // .catchError(() => this.logout());
   }
 
@@ -50,7 +50,7 @@ export class AuthenticationService {
   }
 
   public getInterruptedUrl(): string {
-    this.interruptedUrl = '/auth/login';
+    this.interruptedUrl = '/login';
     return this.interruptedUrl;
   }
 
@@ -59,11 +59,13 @@ export class AuthenticationService {
   }
 
   public login(email: string, password: string) {
-    return this.http.post(`${environment.apiUrl}/login`, JSON.stringify({ email: email.toLowerCase(), password: password }), this.options);
+    return this.http.post(`${environment.apiUrl}/api/login`,
+      JSON.stringify({ email: email.toLowerCase(), password: password }),
+      this.options);
   }
 
   public register(user: any) {
-    return this.http.post(`${environment.apiUrl}/register`, JSON.stringify(user), this.options);
+    return this.http.post(`${environment.apiUrl}/api/register`, JSON.stringify(user), this.options);
   }
 
   public logout() {

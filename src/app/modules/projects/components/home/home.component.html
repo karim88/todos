@@ -1,3 +1,102 @@
-<p>
-  home works!
-</p>
+
+<div class="box">
+  <div class="input-group">
+    <div class="input-group-prepend" *ngIf="false">
+      <div class="input-group-text d-none d-sm-block checkbox-container">
+        <input type="checkbox" aria-label="Select or unselect all as finished">
+        <span class="checkmark"></span>
+      </div>
+    </div>
+    <input type="text" [disabled]="projectId == 0" class="form-control" [(ngModel)]="taskName" (keyup.enter)="newTask()"
+           aria-label="Task name">
+    <div class="input-group-append">
+      <select [(ngModel)]="projectId" class="custom-select" (change)="getTasks()">
+        <option *ngFor="let project of projects" title="{{project.description}}" value="{{project.id}}">{{project.name}}</option>
+      </select>
+      <button type="button" class="btn btn-outline-dark" title=" add new project" (click)="openModal(template)">
+        <i class="fa fa-plus"></i></button>
+    </div>
+  </div>
+  <div *ngIf="tasks">
+    <div *ngIf="tasks.length > 0">
+      <ng-container *ngFor="let task of tasks">
+      <app-task *ngIf="filtedTasks(task, filterName)"
+                [tasks]="tasks"
+                [task]="task"
+                [taskName]="taskName"
+                [projectId]="projectId"
+                [toEdit]="toEdit"
+                (editEmitter)="editTask(task)"
+                (finishEmitter)="finishTask(task)"
+                (deleteEmitter)="deleteTask(task.id)"
+      ></app-task>
+      </ng-container>
+    </div>
+
+    <div *ngIf="tasks.length === 0 && projectId !== 0">
+      <div class="alert alert-secondary" role="alert">
+        <h4 class="alert-heading">Well</h4>
+        <p>You still don't have any task</p>
+      </div>
+    </div>
+
+    <div *ngIf="projectId === 0">
+      <div class="alert alert-secondary" role="alert">
+        <h4 class="alert-heading">Really??</h4>
+        <p>You don't have any project yet</p>
+      </div>
+    </div>
+
+
+    <div class="row toolbar">
+      <div class="col-3 d-none d-sm-block">{{itemsLeft()}}</div>
+      <div class="col-6 text-center">
+        <div class="btn-group btn-group-sm" role="group" aria-label="Buttons group used to filter tasks">
+          <button type="button" class="btn btn-dark"
+                  [class.active]="filterName === 'all'"
+                  (click)="filterName = 'all'">All</button>
+          <button type="button" class="btn btn-dark"
+                  [class.active]="filterName === 'active'"
+                  (click)="filterName = 'active'">Active</button>
+          <button type="button" class="btn btn-dark"
+                  [class.active]="filterName === 'completed'"
+                  (click)="filterName = 'completed'">Completed</button>
+        </div>
+      </div>
+      <div class="col-3 text-right d-none d-sm-block">
+        <a href="javascript:void(0);" *ngIf="haveFinished()" (click)="archiveFinished()" title="archive completed">Clear completed</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<ng-template #template>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left">Modal</h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <form name="form" (ngSubmit)="f.form.valid && addProject()" #f="ngForm" novalidate>
+      <div class="form-group">
+        <label for="name">Name</label>
+        <input type="text" class="form-control" name="name" [(ngModel)]="project.name"
+               #name="ngModel" [ngClass]="{ 'is-invalid': f.submitted && name.invalid }" required />
+        <div *ngIf="f.submitted && name.invalid" class="invalid-feedback">
+          <div *ngIf="name.errors.required">Name is required</div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="description">Description (optional)</label>
+        <textarea class="form-control" name="description" [(ngModel)]="project.description"
+                  ></textarea>
+      </div>
+      <div class="form-group">
+        <button class="btn btn-primary">Add</button>
+      </div>
+    </form>
+  </div>
+</ng-template>

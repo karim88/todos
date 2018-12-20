@@ -6,7 +6,7 @@ import {ProtectedGuard, PublicGuard} from 'ngx-auth';
 
 const routes: Routes = [
   {
-    path: 'auth',
+    path: '',
     component: AppComponent,
     children: [
       {
@@ -15,26 +15,19 @@ const routes: Routes = [
         loadChildren: './modules/auth/auth.module#AuthModule'
       },
       {
+        path: 'home',
+        loadChildren: './modules/projects/projects.module#ProjectsModule',
+      },
+      {
         path: 'logout',
         canActivate: [ProtectedGuard],
         component: LogoutComponent
-      }
-    ],
-  },
-  {
-    path: '',
-    component: AppComponent,
-    canActivate: [ProtectedGuard],
-    children: [
-      {
-        path: '',
-        loadChildren: './modules/projects/projects.module#ProjectsModule',
       }
     ]
   },
   {
     path: '',
-    redirectTo: 'shops/nearby',
+    redirectTo: '/home',
     pathMatch: 'full'
   }
 ];

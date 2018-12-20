@@ -1,0 +1,21 @@
+<div class="row tasks">
+  <div class="col-2 checkbox-container">
+    <input type="checkbox" [(ngModel)]="task.is_finished" aria-label="Finish task">
+    <span class="checkmark" (click)="finishTask(task)"></span>
+  </div>
+  <div class="col-5" (dblclick)="toEdit = task.id" (mouseleave)="editTask(task)">
+    <input type="text" class="form-control editfield" [class.finished]="task.is_finished" autofocus [disabled]="toEdit !== task.id" [(ngModel)]="task.new_name" (keyup.enter)="editTask(task)"
+           aria-label="Edit Task">
+  </div>
+  <div class="col-3">
+          <span class="actions">
+            <i class="fa fa-pencil text-success" *ngIf="!toEdit"  (click)="toEdit = task.id"></i>
+            <i class="fa fa-times text-primary" *ngIf="toEdit" (click)="toEdit = 0"></i>
+            <i class="fa fa-trash text-danger" (click)="deleteTask(task.id)"></i>
+          </span>
+  </div>
+  <div class="col-2 d-none d-sm-block">
+    <small>{{ task.updated_at | timeAgoPipe }}</small>
+  </div>
+</div>
+

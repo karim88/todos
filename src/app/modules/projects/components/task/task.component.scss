@@ -1,0 +1,32 @@
+.tasks {
+  padding: 20px;
+  border-bottom: 1px solid #eee;
+}
+
+.actions i {
+  padding: 0 5px;
+  cursor: pointer;
+}
+
+.row .actions {
+  display: none;
+}
+
+.row:hover .actions {
+  display: block;
+}
+
+.editfield {
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.editfield:disabled {
+  background-color: #fff;
+  border: 0 solid #000;
+}
+
+.finished {
+  text-decoration: line-through;
+  color: #5555;
+}
